@@ -1,3 +1,5 @@
+Questions
+
 1. Set up the TDAmeritrade account
 2. Set up authentication in R
 3. Analyze portfolio
