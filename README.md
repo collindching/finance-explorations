@@ -5,7 +5,7 @@ This is where I store my code related to exploring financial data and answering 
 - What is an ideal portfolio for someone who doesn't need their money for ~7-8 years? 
 - Ideal portfolio allocation each year?
 - What is the greatest delta between a stock that I sold and what it is worth now? 
-
+- Should I buy a home or rent? 
 
 
 # Content

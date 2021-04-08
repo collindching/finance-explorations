@@ -8,13 +8,14 @@ refreshToken = readRDS('TDRefToken.rds')
 consumerKey = readRDS('consumerKey.rds')
 accountIDs = readRDS('accountIDs.rds')
 
+# Log in
 accessToken = rameritrade::td_auth_accessToken(consumerKey, refreshToken)
-
 act_dt = td_accountData()
 
 names(act_dt)
 names(act_dt$positions)
 
+# Pull out some portfolio stats
 df_pos <- act_dt$positions
 df_equity <- df_pos %>%
     filter(!grepl('_',instrument.symbol)) %>%
@@ -26,16 +27,22 @@ df_equity <- df_pos %>%
     mutate(weight = market_value/sum(market_value)) %>%
     arrange(desc(weight))
 
-
-symbols <- df_equity$ticker
-pr_daily <- getSymbols(symbols, src = "yahoo",
+# Pull price data for df
+tickers <- df_equity$tickers
+tickers <- getSymbols(tickers, src = "yahoo",
                        from = "2015-01-01",
                        to = "2021-03-05",
                        auto.assign = T) 
 
-get(pr_daily[[1]])
+df_prices <- map(symbols, ~Ad(get(.x))) %>%
+    reduce(merge)
 
-View(df_equity)
+names(df_prices) <- tickers
+
+# Get monthly returns
+# https://stackoverflow.com/questions/16136245/convert-times-series-to-quarterly-with-nas
+
+pr_monthly <- period.apply(zoo.data, INDEX=ep, FUN=function(x) mean(x)) 
+View(pr_monthly)
 
 
-    
